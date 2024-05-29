@@ -12,17 +12,33 @@ class Controller:
         self._listCountry = []
 
     def fillDD(self):
-        pass
+        listOfCountries = self._model.getCountries()
+        for c in listOfCountries:
+            self._view.ddcountry.options.append(ft.dropdown.Option(c))
+        self._view.update_page()
 
 
     def handle_graph(self, e):
-        pass
+        country = self._view.ddcountry.value
+        anno = self._view.ddyear.value
+        self._model.buildGraph(country, anno)
+        self._view.txt_result.controls.append(ft.Text(f"Numero di nodi: {self._model.getNumberOfNodes()}\n"
+                                                      f"Numero di archi: {self._model.getNumberOfEdges()}"))
 
+        self._view.update_page()
 
 
     def handle_volume(self, e):
-        pass
-
+        volumiVendita = self._model.getVolumeVendita()
+        for key, value in volumiVendita.items():
+            self._view.txtOut2.controls.append(ft.Text(f"{key} --> {value}"))
+        self._view.update_page()
 
     def handle_path(self, e):
-        pass
+        numArchi = self._view.txtN.value
+        try: int(numArchi) >= 2
+        except ValueError:
+            self._view.txtOut2.controls.append(ft.Text(f"immettere un numero intero maggiore di 2"))
+            return
+
+
